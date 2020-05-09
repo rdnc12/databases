@@ -1,0 +1,13 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "userdb",
+            "dialect": "MySQL",
+            "name": "hyf",
+            "password": "hyfpassword",
+            "port": 3306,
+            "server": "localhost",
+            "username": "hyfuser"
+        }
+    ]
+}
