@@ -1,0 +1,71 @@
+Original table: 
+
+
++-----------+---------------+----------------+-----------+-------------+------------+-------------------+-----------+------------------+
+| member_id | member_name   | member_address | dinner_id | dinner_date | venue_code | venue_description | food_code | food_description |
++-----------+---------------+----------------+-----------+-------------+------------+-------------------+-----------+------------------+
+|         1 | Amit          | 325 Max park   | D00001001 | 2020-03-15  | B01        | Grand Ball Room   | C1, C2    | Curry, Cake      |
+|         2 | Ben           | 24 Hudson lane | D00001002 | 2020-03-15  | B02        | Zoku Roof Top     | S1, C2    | Soup, Cake       |
+|         3 | Cristina      | 516 6th Ave    | D00001002 | 2020-03-15  | B02        | Zoku Roof Top     | S1, C2    | Soup, Cake       |
+|         4 | Dan           | 89 John St     | D00001003 | 2020-03-20  | B03        | Goat Farm         | P1, T1, M1| Pie, Tea, Mousse |
+|         5 | Ema           | 91 Pixar St    | D00001003 | 2020-03-20  | B03        | Goat Farm         | P1, T1, M1| Pie, Tea, Mousse |
+|         6 | Fatima        | 56 8th Ave     | D00001004 | 2020-03-20  | B04        | Mama's Kitchen    | F1, M1    | Falafal, Mousse  |
+|         7 | Gabor         | 54 Vivaldi St  | D00001005 | 2020-02-20  | B05        | Hungry Hungary    | G1, P2    | Goulash, Pasca   |
+|         8 | Hema          | 9 Peter St     | D00001003 | 2020-03-20  | B03        | Goat Farm         | P1, T1, M1| Pie, Tea, Mousse |
++-----------+---------------+----------------+-----------+-------------+------------+-------------------+-----------+------------------+
+
+________________________________________________________________________________________________________________________________________
+Q1- How can you convert the table into 1NF ?
+
+food_code and food_description has multiple values. These are against 1NF.
++-----------+---------------+----------------+-----------+-------------+------------+-------------------+-----------+------------------+
+| member_id | member_name   | member_address | dinner_id | dinner_date | venue_code | venue_description | food_code | food_description |
++-----------+---------------+----------------+-----------+-------------+------------+-------------------+-----------+------------------+
+|         1 | Amit          | 325 Max park   | D00001001 | 2020-03-15  | B01        | Grand Ball Room   | C1        | Curry            |
+|         1 | Amit          | 325 Max park   | D00001001 | 2020-03-15  | B01        | Grand Ball Room   | C2        | Cake             |
+|         2 | Ben           | 24 Hudson lane | D00001002 | 2020-03-15  | B02        | Zoku Roof Top     | S1        | Soup             |
+|         2 | Ben           | 24 Hudson lane | D00001002 | 2020-03-15  | B02        | Zoku Roof Top     | C2        | Cake             |
+|         3 | Cristina      | 516 6th Ave    | D00001002 | 2020-03-15  | B02        | Zoku Roof Top     | S1        | Soup             |
+|         3 | Cristina      | 516 6th Ave    | D00001002 | 2020-03-15  | B02        | Zoku Roof Top     | C2        | Cake             |
+|         4 | Dan           | 89 John St     | D00001003 | 2020-03-20  | B03        | Goat Farm         | P1        | Pie              |
+|         4 | Dan           | 89 John St     | D00001003 | 2020-03-20  | B03        | Goat Farm         | T1        | Tea              |
+|         4 | Dan           | 89 John St     | D00001003 | 2020-03-20  | B03        | Goat Farm         | M1        | Mousse           |
+|               ....                                                                                       |
++-----------+---------------+----------------+-----------+-------------+------------+-------------------+-----------+------------------+
+
+________________________________________________________________________________________________________________________________________
+
+Q2- What are the super, candidate, primary keys ?
+
+Super Keys 
+     { member_id, member_name, food_code, food_description}
+     { member_id, member_address, food_description}
+
+Candidate Keys 
+     { member_address, food_code }
+     { member_id, food_code }   
+     { member_id, food_description}   
+     { member_address, food_description}
+
+Primary Key 
+     (member_id)
+
+________________________________________________________________________________________________________________________________________
+
+Q3- What are the potential relationships between different possible tables ?
+     The relationships between tables are "many-to-many".
+     Tables are:
+                MEMBERS,DINNERS,VENUES,ATTENDS,FOODS
+
+________________________________________________________________________________________________________________________________________
+
+Q4- How can you develop the set of 2NF tables?
+    Iit is depends on our candidate keys.
+    { member_address, food_code } => To apply 2NF rule
+                member_address depends on member_id and member_name
+                food_code depends on food_description
+________________________________________________________________________________________________________________________________________
+
+Q5- How can you develop the set of 3NF tables?
+     1- dinner_id is a non-key attribute since dinner_date depend on dinner_id it should be stored on another table
+    2- venue_code is a non-key attribute since venue_description depend on venue_code it should be stored on another table    
