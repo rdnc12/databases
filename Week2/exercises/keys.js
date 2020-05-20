@@ -1,27 +1,29 @@
 const util = require("util");
 const mysql = require("mysql");
+const { authors } = require("./tables");
 
 const connection = mysql.createConnection({
   host: "localhost",
   user: "hyfuser",
   password: "hyfpassword",
-  database: "userdb",
 });
 
 const execQuery = util.promisify(connection.query.bind(connection));
 
 const seedDatabase = async () => {
+  const DROP_DB = `DROP DATABASE IF EXISTS week2DB`;
+  const CREATE_DB = `CREATE DATABASE IF NOT EXISTS week2DB`;
+  const USE_DB = `USE week2DB`;
   const CREATE_AUTHORS_TABLE = `CREATE TABLE IF NOT EXISTS Authors (
-        author_no int NOT NULL AUTO_INCREMENT,
-        author_name varchar(30),
-        university varchar(30),
+        author_no INT PRIMARY KEY,
+        author_name VARCHAR(30),
+        university VARCHAR(30),
         date_of_birth DATE ,
-        h_index int,
-        gender enum('f','m'),
-        CONSTRAINT PK_Authors PRIMARY KEY (author_no))`;
+        h_index INT,
+        gender ENUM('f','m'))`;
 
   const ADD_COLLABORATOR = ` ALTER TABLE Authors
-                             ADD COLUMN collaborator int`;
+                             ADD COLUMN collaborator INT`;
 
   const ADD_FOREIGN_KEY = `ALTER TABLE Authors
                             ADD CONSTRAINT FK_Authors
@@ -31,9 +33,17 @@ const seedDatabase = async () => {
   connection.connect();
 
   try {
-    await execQuery(CREATE_AUTHORS_TABLE);
-    await execQuery(ADD_COLLABORATOR);
-    await execQuery(ADD_FOREIGN_KEY);
+    await Promise.all[
+      (execQuery(DROP_DB),
+      execQuery(CREATE_DB),
+      execQuery(USE_DB),
+      execQuery(CREATE_AUTHORS_TABLE),
+      execQuery(ADD_COLLABORATOR),
+      execQuery(ADD_FOREIGN_KEY))
+    ];
+    authors.forEach(async (author) => {
+      await execQuery("INSERT INTO Authors SET ?", author);
+    });
   } catch (error) {
     console.error(error);
     connection.end();
