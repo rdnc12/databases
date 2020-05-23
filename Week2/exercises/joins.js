@@ -27,8 +27,14 @@ const seedData = async () => {
   connection.connect();
 
   try {
-    await execQuery(PRINTS_AUTHORS_NAME);
-    await execQuery(COLUMN_AUTHORS_AND_PAPER_TITLE);
+    console.log(
+      "prints names of all Authors and their corresponding Collaborators",
+      await execQuery(PRINTS_AUTHORS_NAME)
+    );
+    console.log(
+      "prints all columns of Authors and their pubished paper_title.If there is an author without any Research_Papers, print the information of that Author too",
+      await execQuery(COLUMN_AUTHORS_AND_PAPER_TITLE)
+    );
   } catch (error) {
     console.error(error);
     connection.end();

@@ -24,9 +24,12 @@ const seedData = async () => {
 
   const query3 = `SELECT AVG(h_index),university FROM Authors GROUP BY university `;
 
-  const query4 = `SELECT AVG(h_index), university 
-                  FROM Authors AS a INNER JOIN Research_Papers 
-                  AS rp ON a.author_no= rp.paper_id GROUP BY a.university`;
+  const query4 = `SELECT a.university,
+                  COUNT(DISTINCT rp.paper_title) AS 'Sum of the Research Papers' 
+                  FROM Authors AS a
+                  INNER JOIN Research_Papers 
+                  AS rp ON a.author_no= rp.paper_id 
+                  GROUP BY a.university`;
 
   const query5 = `SELECT MIN(h_index), MAX(h_index), university FROM Authors GROUP BY university`;
 
