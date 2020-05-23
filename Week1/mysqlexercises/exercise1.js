@@ -25,13 +25,13 @@ const seedDatabase = async () => {
 
   connection.connect();
   try {
-    await executeQuery("DROP DATABASE IF EXISTS meetup");
-    await executeQuery("CREATE DATABASE IF NOT EXISTS meetup");
-    await executeQuery("USE meetup");
+    await execQuery("DROP DATABASE IF EXISTS meetup");
+    await execQuery("CREATE DATABASE IF NOT EXISTS meetup");
+    await execQuery("USE meetup");
 
-    await Promise.all[
-      (execQuery(createInvitee), execQuery(createRoom), execQuery(createMeeting))
-    ];
+    await execQuery(createInvitee);
+    await execQuery(createRoom);
+    await execQuery(createMeeting);
 
     await Promise.all(
       Object.keys(tables).map((entity) => {
