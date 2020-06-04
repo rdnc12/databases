@@ -36,13 +36,14 @@ const seedDatabase = async () => {
 
   try {
     await connect();
-    await Promise.all(
-      Object.keys(tables).map((entity) => {
+
+    
+    Object.keys(tables)
+      .map((entity) => {
         tables[entity].map(async (entityInstance) => {
           await executeQuery(`INSERT INTO ${entity} SET ?`, entityInstance);
         });
-      })
-    );
+      });
 
     connection.end();
   } catch (error) {

@@ -25,13 +25,12 @@ const createTables = async () => {
   try {
     await connect();
 
-    await Promise.all[
-      (executeQuery("DROP DATABASE IF EXISTS transaction"),
-      executeQuery("CREATE DATABASE IF NOT EXISTS transaction"),
-      executeQuery("USE transaction"),
-      executeQuery(createAccountTable),
-      executeQuery(createAccountChangesTable))
-    ];
+    await executeQuery("DROP DATABASE IF EXISTS transaction");
+    await executeQuery("CREATE DATABASE IF NOT EXISTS transaction");
+    await executeQuery("USE transaction");
+    
+    await executeQuery(createAccountTable);
+    await executeQuery(createAccountChangesTable);
 
     connection.end();
   } catch (error) {

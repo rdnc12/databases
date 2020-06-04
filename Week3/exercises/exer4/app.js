@@ -1,4 +1,3 @@
-
 const assert = require("assert");
 const { MongoClient } = require("mongodb");
 
@@ -9,21 +8,22 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
 });
 
-const methodForm = (methodName) => {
-  client.connect(function (err) {
-    assert.equal(null, err);
-    console.log("Connected successfully to server");
+const seedDb = async (query) => {
+  try {
+    await client.connect();
+    const db = await client.db(dbName);
 
-    const db = client.db(dbName);
-
-    methodName(db, function () {
-      client.close();
+    await query(db, async () => {
+      await client.close();
     });
-  });
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await client.close();
+  }
 };
 
-
-const insertDocuments = function (db, callback) {
+const insertDocuments =  (db, callback) => {
   const collection = db.collection("city");
 
   collection.insertMany(
@@ -38,7 +38,7 @@ const insertDocuments = function (db, callback) {
         name: "Mersin",
       },
     ],
-    function (err, result) {
+     (err, result)=> {
       assert.equal(err, null);
       assert.equal(3, result.result.n);
       assert.equal(3, result.ops.length);
@@ -51,7 +51,6 @@ const insertDocuments = function (db, callback) {
 const updateDocument = function (db, callback) {
   // Get the documents collection
   const collection = db.collection("city");
-  // Update document where a is 2, set b equal to 1
   collection.updateOne(
     {
       name: "Bursa",
@@ -73,7 +72,6 @@ const updateDocument = function (db, callback) {
 const removeDocument = function (db, callback) {
   // Get the documents collection
   const collection = db.collection("city");
-  // Delete document where a is 3
   collection.deleteOne({ name: "Bursa" }, function (err, result) {
     assert.equal(err, null);
     assert.equal(1, result.result.n);
@@ -82,6 +80,6 @@ const removeDocument = function (db, callback) {
   });
 };
 
-methodForm(insertDocuments);
-methodForm(updateDocument);
-methodForm(removeDocument);
+seedDb(insertDocuments);
+seedDb(updateDocument);
+seedDb(removeDocument);
